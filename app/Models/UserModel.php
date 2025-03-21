@@ -3,13 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Model;
 
-class User extends Authenticatable
+class UserModel extends Model
 {
     use HasFactory;
 
-    protected $table = 'user'; // Menentukan tabel yang digunakan
+    protected $table = 'users'; // Sesuaikan dengan tabel di database
     protected $fillable = ['nama', 'npm', 'kelas_id'];
 
     public function kelas()

@@ -16,21 +16,20 @@
             margin: 0;
         }
 
-        /* Overlay transparan agar lebih aesthetic */
         .overlay {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(255, 182, 193, 0.5); /* Pink pastel transparan */
+            background: rgba(255, 182, 193, 0.5);
             z-index: 1;
         }
 
         .profile-card {
             position: relative;
             z-index: 2;
-            background: rgba(255, 182, 193, 0.9); /* Pink pastel lebih soft */
+            background: rgba(255, 182, 193, 0.9);
             padding: 30px;
             border-radius: 15px;
             box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
@@ -45,18 +44,18 @@
             background-size: cover;
             background-position: center;
             margin: 0 auto 20px;
-            border: 4px solid #FF69B4; /* Pink cerah */
+            border: 4px solid #FF69B4;
         }
 
         .profile-info {
             width: 100%;
             padding: 12px;
             margin: 8px 0;
-            background: #FFFFFF; /* Kotak form putih */
-            border: 2px solid #FF69B4; /* Border pink */
+            background: #FFFFFF;
+            border: 2px solid #FF69B4;
             border-radius: 8px;
             font-weight: bold;
-            color: #4A235A; /* Warna ungu tua */
+            color: #4A235A;
             font-size: 18px;
             text-align: center;
         }
@@ -64,14 +63,13 @@
 </head>
 <body>
 
-    <!-- Overlay Transparan -->
     <div class="overlay"></div>
 
     <div class="profile-card">
         <div class="profile-img" style="background-image: url('{{ asset('img/loopie.jpg') }}');"></div>
-        <div class="profile-info">{{ $nama }}</div>
-        <div class="profile-info">{{ $npm }}</div>
-        <div class="profile-info">{{ $kelas }}</div>
+        <div class="profile-info">Nama: {{ $nama }}</div>
+        <div class="profile-info">NPM: {{ $npm }}</div>
+        <div class="profile-info">Kelas: {{ $nama_kelas ?? 'Kelas tidak ditemukan' }}</div>
     </div>   
 
 </body>
