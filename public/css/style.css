@@ -1,0 +1,56 @@
+body {
+    font-family: Arial, sans-serif;
+    background: url('/img/loopie.jpg') no-repeat center center fixed;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container {
+    text-align: center;
+    width: 80%;
+    max-width: 800px;
+}
+
+.user-card {
+    background: rgba(255, 192, 203, 0.95);
+    /* Warna pink transparan */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.table {
+    width: 100%;
+    margin-top: 10px;
+}
+
+th,
+td {
+    padding: 10px;
+    text-align: center;
+}
+
+.table-dark {
+    background: #ff4d6d;
+    color: white;
+}
+
+.btn {
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background: #007bff;
+    border: none;
+}
+
+.btn-danger {
+    background: #dc3545;
+    border: none;
+}

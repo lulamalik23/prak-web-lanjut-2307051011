@@ -28,4 +28,12 @@ class Kelas extends Model
     {
         return self::all();
     }
+
+    /**
+     * Method tambahan dari gambar yang Anda berikan
+     */
+    public function getAllKelas()
+    {
+        return $this->all();
+    }
 }
