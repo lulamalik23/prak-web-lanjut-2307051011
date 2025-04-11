@@ -7,14 +7,17 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            background: url('{{ asset('img/loopie.jpg') }}') no-repeat center center fixed;
-            background-size: cover;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-        }
+    background: url('/img/loopie.jpg') no-repeat center center fixed;
+    background-size: cover; /* Pastikan gambar penuh */
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+    width: 100vw;
+    margin: 0;
+    padding: 0;
+}
+
+
 
         .overlay {
             position: absolute;
@@ -66,7 +69,7 @@
     <div class="overlay"></div>
 
     <div class="profile-card">
-        <div class="profile-img" style="background-image: url('{{ asset('img/loopie.jpg') }}');"></div>
+        <div class="profile-img" style="background: url('{{ asset('img/loopie.jpg') }}') no-repeat center center fixed; background-size: cover;">
         <div class="profile-info">Nama: {{ $nama }}</div>
         <div class="profile-info">NPM: {{ $npm }}</div>
         <div class="profile-info">Kelas: {{ $nama_kelas ?? 'Kelas tidak ditemukan' }}</div>
