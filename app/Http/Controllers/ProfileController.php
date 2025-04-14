@@ -16,6 +16,7 @@ class ProfileController extends Controller
      */
     public function profile($nama = null, $kelas = null, $npm = null)
     {
+        // Mengirim data ke view
         return view('profile', compact('nama', 'kelas', 'npm'));
     }
 
@@ -26,6 +27,7 @@ class ProfileController extends Controller
      */
     public function index()
     {
+        // Menampilkan view profile tanpa parameter
         return view('profile');
     }
 }
