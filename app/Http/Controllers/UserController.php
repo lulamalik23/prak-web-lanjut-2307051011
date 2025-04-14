@@ -2,27 +2,49 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Kelas;
 use App\Models\UserModel;
-use App\Http\Requests\UserRequest;
+use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
     protected $userModel;
     protected $kelasModel;
 
-    // 🔹 Inisialisasi model dalam __construct
-    public function __construct()
+    public function __construct(UserModel $userModel, Kelas $kelasModel)
     {
-        $this->userModel = new UserModel();
-        $this->kelasModel = new Kelas();
+        $this->userModel = $userModel;
+        $this->kelasModel = $kelasModel;
     }
 
-    // 🔹 Menampilkan form tambah user
+    // 🔸 Menampilkan halaman detail user berdasarkan ID
+    public function show($id)
+    {
+        $user = $this->userModel->getUser($id);
+
+        $data = [
+            'title' => 'Profile',
+            'user' => $user,
+        ];
+
+        return view('profile', $data);
+    }
+
+    // 🔸 Menampilkan daftar user
+    public function index()
+    {
+        $data = [
+            'title' => 'List User',
+            'users' => $this->userModel->getUser(),
+        ];
+
+        return view('list_user', $data);
+    }
+
+    // 🔸 Menampilkan form untuk membuat user baru
     public function create()
     {
-        $kelas = $this->kelasModel->getKelas(); // Menggunakan properti kelasModel
+        $kelas = $this->kelasModel->getKelas();
 
         return view('create_user', [
             'title' => 'Create User',
@@ -30,26 +52,34 @@ class UserController extends Controller
         ]);
     }
 
-    // 🔹 Menyimpan user baru dan redirect ke halaman /users
-    public function store(UserRequest $request)
+    // 🔸 Menyimpan data user ke database
+    public function store(Request $request)
     {
-        $this->userModel->create([
-            'nama' => $request->input('nama'),
-            'npm' => $request->input('npm'),
-            'kelas_id' => $request->input('kelas_id'),
+        // Validasi input dari form
+        $request->validate([
+            'nama' => 'required|string|max:255',
+            'npm' => 'required|string|max:255',
+            'kelas_id' => 'required|integer',
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-        return redirect()->to('/users')->with('success', 'User berhasil ditambahkan!');
-    }
+        // Proses upload foto
+        $fotoPath = null;
+        if ($request->hasFile('foto')) {
+            $foto = $request->file('foto');
+            $namaFile = time() . '_' . $foto->getClientOriginalName(); // Hindari nama duplikat
+            $foto->move(public_path('upload/img'), $namaFile);
+            $fotoPath = 'upload/img/' . $namaFile; // Simpan path yang relatif dari root public
+        }
 
-    // 🔹 Menampilkan daftar user
-    public function index()
-    {
-        $data = [
-            'title' => 'List User', // 🔹 Judul halaman
-            'users' => $this->userModel->getUser(), // 🔹 Ambil data user dengan relasi kelas
-        ];
+        // Simpan data user
+        $this->userModel->create([
+            'nama' => $request->nama,
+            'npm' => $request->npm,
+            'kelas_id' => $request->kelas_id,
+            'foto' => $fotoPath,
+        ]);
 
-        return view('list_user', $data);
+        return redirect()->route('user.index')->with('success', 'User berhasil ditambahkan');
     }
 }

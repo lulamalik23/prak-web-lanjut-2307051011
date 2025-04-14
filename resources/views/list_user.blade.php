@@ -1,43 +1,68 @@
 @extends('layouts.app')
 
 @section('content')
-
-<!-- Basic Tables start -->
-<section class="d-flex justify-content-center align-items-center vh-100">
-    <div class="container">
-        <div class="bg-gradient-to-r from-pink-300 to-red-200 p-6 rounded-xl shadow-lg w-full max-w-lg mx-auto">
-            <h2 class="text-center text-2xl font-bold text-gray-800">List User</h2>
-            <p class="text-center text-gray-700 mb-4">Berikut adalah daftar pengguna yang terdaftar dalam sistem.</p>
-
-            <div class="table-responsive">
-                <table class="table table-bordered text-center border-gray-300 rounded-lg overflow-hidden">
-                    <thead class="bg-red-400 text-white">
-                        <tr>
-                            <th>ID</th>
-                            <th>Nama</th>
-                            <th>NPM</th>
-                            <th>Kelas</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-    @foreach ($users as $user)
-    <tr class="bg-white hover:bg-red-100 transition">
-        <td class="text-gray-800">{{ $user->id }}</td>
-        <td class="text-gray-800">{{ $user->nama }}</td>
-        <td class="text-gray-800">{{ $user->npm }}</td>
-        <td class="text-gray-800">{{ $user->nama_kelas }}</td>
-        <td></td> <!-- Kolom aksi kosong -->
-    </tr>
-    @endforeach
-</tbody>
-
-                </table>
+<div class="container-fluid py-4">
+    <div class="row justify-content-center">
+        <div class="col-12 col-xl-11">
+        {{-- Judul di Tengah --}}
+            <div class="text-center mb-4">
+                <h2 class="mb-3">Daftar Pengguna</h2>
+                <a href="{{ route('user.create') }}" class="btn btn-primary">+ Tambah Pengguna Baru</a>
             </div>
 
+            @if(session('success'))
+                <div class="alert alert-success text-center">
+                    {{ session('success') }}
+                </div>
+            @endif
+
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white text-center">
+                    <h4 class="mb-0">List User</h4>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted text-center mb-4">Berikut adalah daftar pengguna yang terdaftar dalam sistem.</p>
+                    <div class="table-responsive">
+                        <table class="table table-hover table-bordered align-middle text-center w-100">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th width="50">ID</th>
+                                    <th>Nama</th>
+                                    <th>NPM</th>
+                                    <th>Kelas</th>
+                                    <th>Foto</th>
+                                    <th width="100">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($users as $user)
+                                    <tr>
+                                        <td>{{ $user->id }}</td>
+                                        <td>{{ $user->nama }}</td>
+                                        <td>{{ $user->npm }}</td>
+                                        <td>{{ $user->kelas_id }}</td>
+                                        <td>
+                                            @if ($user->foto)
+                                                <img src="{{ asset($user->foto) }}" alt="Foto {{ $user->nama }}" class="img-thumbnail" style="width: 60px; height: 60px; object-fit: cover;">
+                                            @else
+                                                <span class="text-muted fst-italic">Tidak ada foto</span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <a href="{{ route('user.show', $user->id) }}" class="btn btn-warning btn-sm">Detail</a>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="6" class="text-center text-muted">Tidak ada data pengguna.</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-</section>
-<!-- Basic Tables end -->
-
+</div>
 @endsection
