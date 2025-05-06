@@ -1,0 +1,43 @@
+/* public/css/custom-buttons.css */
+
+.btn-detail {
+    background-color: #f9c74f;
+    color: white;
+    width: 70px;
+    height: 35px;
+    font-size: 13px;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+.btn-detail:hover {
+    background-color: #f1c232;
+}
+
+.btn-edit {
+    background-color: #90be6d;
+    color: white;
+    width: 70px;
+    height: 35px;
+    font-size: 13px;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+.btn-edit:hover {
+    background-color: #79ac5a;
+}
+
+.btn-delete {
+    background-color: #f94144;
+    color: white;
+    width: 70px;
+    height: 35px;
+    font-size: 13px;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+.btn-delete:hover {
+    background-color: #d62828;
+}
