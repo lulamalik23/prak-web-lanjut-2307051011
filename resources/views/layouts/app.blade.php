@@ -10,9 +10,9 @@
 
     {{-- Hubungkan Custom CSS dari Public Folder --}}
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/custom-buttons.css') }}">
 </head>
 <body class="flex items-center justify-center min-h-screen bg-white">
-
 
     <div class="bg-pink-200 p-6 rounded-lg shadow-lg w-full max-w-md">
         @yield('content')

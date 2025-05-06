@@ -1,28 +1,20 @@
 <?php
-
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 
-// 🔹 Route untuk halaman utama (welcome)
 Route::get('/', function () {
     return view('welcome');
 });
 
-// 🔹 Route untuk Profile dengan Parameter Opsional
+
+Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
 Route::get('/profile/{nama?}/{kelas?}/{npm?}', [ProfileController::class, 'profile'])->name('profile.show');
 
-// 🔹 Route untuk Halaman Form User
-Route::get('/user/create', [UserController::class, 'create'])->name('user.create');
-
-// 🔹 Route untuk Menyimpan Data User
-Route::post('/user/store', [UserController::class, 'store'])->name('user.store');
-
-// 🔹 Route untuk Profile Tanpa Parameter
-Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
-
-// 🔹 Route untuk Menampilkan Daftar User (List User)
-Route::get('/users', [UserController::class, 'index'])->name('user.index');
-
-// 🔹 Route untuk Menampilkan Detail User (Profile User)
-Route::get('/user/show/{id}', [UserController::class, 'show'])->name('user.show');  // Perbaiki penamaan rute
+Route::get('/user', [UserController::class, 'index'])->name('user.index');            // List
+Route::get('/user/create', [UserController::class, 'create'])->name('user.create');   // Form Tambah
+Route::post('/user', [UserController::class, 'store'])->name('user.store');           // Simpan
+Route::get('/user/{id}', [UserController::class, 'show'])->name('user.show');         // Detail
+Route::get('/user/{id}/edit', [UserController::class, 'edit'])->name('user.edit');    // Form Edit
+Route::put('/user/{id}', [UserController::class, 'update'])->name('user.update');     // Simpan Edit
+Route::delete('/user/{id}', [UserController::class, 'destroy'])->name('user.destroy'); // Hapus
