@@ -1,139 +1,149 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Models\Kelas;
 use App\Models\UserModel;
-use Illuminate\Http\Request;
 
+use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    protected $userModel;
-    protected $kelasModel;
-
-    public function __construct(UserModel $userModel, Kelas $kelasModel)
-    {
-        $this->userModel = $userModel;
-        $this->kelasModel = $kelasModel;
-    }
-
+    public $kelasModel;
+    public $userModel;
     
-    public function show($id)
-    {
-        $user = UserModel::findOrFail($id);
-        $kelas = Kelas::all();
-        $title = 'Detail ' . $user->nama;
+    public function __construct() {
+        $this->userModel = new UserModel();
+        $this->kelasModel = new Kelas();
 
-        return view('show_user', compact('title', 'user', 'kelas'));
     }
+    public function show($id){
+        $user = $this->userModel->getUser($id);
 
-    // Menampilkan daftar user
-    public function index()
-    {
         $data = [
-            'title' => 'List User',
-            'users' => $this->userModel->getUser(),
+            'title' => 'Profile',
+            'user' => $user,
         ];
 
-        return view('list_user', $data);
+        return view('profile', $data);
     }
+    public function index()
+     {
+        $data = [
+        'title' => 'Create User',
+        'users' => $this->userModel->getUser(),
+        ];
+        
+        return view('list_user', $data);
+     }
 
-    // Menampilkan form untuk membuat user baru
-    public function create()
-    {
-        $kelas = $this->kelasModel->getKelas();
+    public function create(){
 
-        return view('create_user', [
+     {
+        $kelasModel = new Kelas();
+
+        $kelas = $kelasModel->getKelas();
+
+        $data = [
             'title' => 'Create User',
             'kelas' => $kelas,
-        ]);
-    }
+        ];
 
-    // Menyimpan data user ke database
-    public function store(Request $request)
-    {
+        return view('create_user', $data);
+
+     }
+}
+
+    public function store(Request $request){
+
         $request->validate([
-            'nama' => 'required|string|max:255',
-            'npm' => 'required|string|max:255',
-            'kelas_id' => 'required|integer',
-            'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'nama' => 'required',
+            'npm' => 'required',
+            'kelas_id' => 'required',
+            'foto' => 'image|file|max:2048', // max 2MB
         ]);
-
-        $fotoPath = null;
+    
+        // Siapkan data yang akan disimpan
+        $data = [
+            'nama' => $request->input('nama'),
+            'npm' => $request->input('npm'),
+            'kelas_id' => $request->input('kelas_id'),
+        ];
+    
+        // Jika ada file yang di-upload
         if ($request->hasFile('foto')) {
-            $foto = $request->file('foto');
-            $namaFile = time() . '_' . $foto->getClientOriginalName();
-            $foto->move(public_path('upload/img'), $namaFile);
-            $fotoPath = 'upload/img/' . $namaFile;
+            $file = $request->file('foto');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->storeAs('uploads', $filename); // simpan di storage/app/public/uploads
+            $data['foto'] = $filename;
         }
-
-        $this->userModel->create([
-            'nama' => $request->nama,
-            'npm' => $request->npm,
-            'kelas_id' => $request->kelas_id,
-            'foto' => $fotoPath,
-        ]);
-
-        return redirect()->route('user.index')->with('success', 'User berhasil ditambahkan');
+    
+        // Simpan ke database
+        $this->userModel->create($data);
+    
+        // Redirect dengan pesan sukses
+        return redirect()->to('/')->with('success', 'User Berhasil dibuat');
     }
 
-    // Menampilkan form edit user
-    public function edit($id)
-    {
-        $user = $this->userModel->findOrFail($id);
-        $kelas = $this->kelasModel->getKelas();
+//         // Validasi input
+//     $request->validate([
+//         'nama' => 'required|string|max:255',
+//         'npm' => 'required|string|max:255',
+//         'kelas_id' => 'required|integer',
+//         'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Validasi untuk foto
+//     ]);
 
-        return view('edit_user', [
-            'title' => 'Edit User',
-            'user' => $user,
-            'kelas' => $kelas,
-        ]);
-    }
+//     // Meng-handle upload foto
+//     if ($request->hasFile('foto')) {
+//         $foto = $request->file('foto');
+//         // Menyimpan file foto di folder 'uploads'
+//         $fotoPath = $foto->move('upload/img', $foto->getClientOriginalName());
+//     } else {
+//         // Jika tidak ada file yang diupload, set fotoPath menjadi null atau default
+//         $fotoPath = null;
+//     }
 
-    // Mengupdate data user
+//     // Menyimpan data ke database termasuk path foto
+//     $this->userModel->create([
+//         'nama' => $request->input('nama'),
+//         'npm' => $request->input('npm'),
+//         'kelas_id' => $request->input('kelas_id'),
+//         'foto' => $fotoPath, // Menyimpan path foto
+//     ]);
+
+//     return redirect()->to('/user')->with('success', 'User berhasil ditambahkan');
+// }
+public function edit($id){
+    $user = UserModel::findOrFail($id);
+    $kelasModel = new Kelas();
+    $kelas =$kelasModel->getKelas();
+    $title = 'Edit User';
+    return view('edit_user', compact('user', 'kelas', 'title'));
+}
+
     public function update(Request $request, $id)
     {
-        $user = $this->userModel->findOrFail($id);
-
-        $request->validate([
-            'nama' => 'required|string|max:255',
-            'npm' => 'required|string|max:255',
-            'kelas_id' => 'required|integer',
-            'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ]);
+        $user = UserModel::findOrFail($id);
 
         $user->nama = $request->nama;
         $user->npm = $request->npm;
         $user->kelas_id = $request->kelas_id;
 
         if ($request->hasFile('foto')) {
-            if ($user->foto && file_exists(public_path($user->foto))) {
-                unlink(public_path($user->foto));
-            }
-
-            $file = $request->file('foto');
-            $filename = time() . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('upload/img'), $filename);
-            $user->foto = 'upload/img/' . $filename;
+            $fileName = time() . '.' . $request->foto->extension();
+            $request->foto->move(public_path('uploads'), $fileName);
+            $user->foto = 'uploads/' . $fileName;
         }
 
         $user->save();
 
-        return redirect()->route('user.index')->with('success', 'Data berhasil diupdate!');
+        return redirect()->route('user.list')->with('success', 'User Berhasil di Update');
     }
 
-    // Menghapus data user
-    public function destroy($id)
+     public function destroy($id)
     {
-        $user = $this->userModel->findOrFail($id);
+    $user = UserModel::findOrFail($id);
+    $user->delete();
 
-        if ($user->foto && file_exists(public_path($user->foto))) {
-            unlink(public_path($user->foto));
-        }
-
-        $user->delete();
-
-        return redirect()->route('user.index')->with('success', 'User berhasil dihapus');
+    return redirect()->to('/user')->with('success', 'User has been deleted successfully');
     }
 }

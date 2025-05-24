@@ -4,10 +4,10 @@
 
 <script src="https://cdn.tailwindcss.com"></script>
 
-<body class="bg-gradient-to-br from-pink-50 to-pink-100 flex items-center justify-center min-h-screen">
+<body class="bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center min-h-screen">
 
     <div class="bg-white shadow-xl rounded-lg p-8 w-full max-w-md border border-gray-200">
-        <h2 class="text-3xl font-bold text-center text-pink-600 mb-6">Tambah User</h2>
+        <h2 class="text-3xl font-bold text-center text-blue-600 mb-6">Tambah User</h2>
 
         <form action="{{ route('user.store') }}" method="post" enctype="multipart/form-data">
             @csrf
@@ -52,10 +52,9 @@
             </div>
 
             <button type="submit" 
-    class="w-full bg-pink-500 text-white font-semibold py-2 rounded-lg hover:bg-pink-600 transition-all duration-200 transform hover:scale-105 shadow-md">
-    Submit
-</button>
-
+                class="w-full bg-blue-500 text-white font-semibold py-2 rounded-lg hover:bg-blue-600 transition-all duration-200 transform hover:scale-105 shadow-md">
+                Submit
+            </button>
         </form>
     </div>
 
